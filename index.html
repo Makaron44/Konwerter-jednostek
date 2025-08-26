@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Konwerter jednostek</title>
+  <link rel="stylesheet" href="./styles.css?v=14">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0f1116" />
+</head>
+<body>
+  <div class="app" role="application" aria-label="Konwerter jednostek">
+    <header class="app-header">
+      <div class="brand">
+        <strong>Konwerter</strong> jednostek
+      </div>
+      <div class="muted small">HTML • CSS • JS • localStorage</div>
+    </header>
+
+    <!-- PRZEŁĄCZNIK MOTYWU -->
+    <div class="theme-switch" role="group" aria-label="Wybierz motyw">
+      <input type="radio" name="theme" id="theme-blue" checked>
+      <label for="theme-blue" class="chip">Blue/Mint</label>
+
+      <input type="radio" name="theme" id="theme-violet">
+      <label for="theme-violet" class="chip">Violet/Pink</label>
+
+      <input type="radio" name="theme" id="theme-lime">
+      <label for="theme-lime" class="chip">Lime/Cyan</label>
+    </div>
+
+    <main class="grid">
+      <!-- PANEL GŁÓWNY -->
+      <section class="card">
+        <nav class="tabs" role="tablist" aria-label="Rodzaj konwersji">
+          <button class="tab active" data-tab="currency" role="tab" aria-selected="true">Waluta</button>
+          <button class="tab" data-tab="length" role="tab" aria-selected="false">Długość</button>
+          <button class="tab" data-tab="temperature" role="tab" aria-selected="false">Temperatura</button>
+          <button class="tab" data-tab="mass" role="tab" aria-selected="false">Masa</button>
+          <button class="tab" data-tab="volume" role="tab" aria-selected="false">Objętość</button>
+          <button class="tab" data-tab="speed" role="tab" aria-selected="false">Prędkość</button>
+        </nav>
+
+        <!-- WALUTA -->
+        <div class="panel" id="panel-currency" role="tabpanel">
+          <div class="row">
+            <label>Kwota
+              <input type="number" id="cur-amount" step="0.01" min="0" value="100" inputmode="decimal">
+            </label>
+          </div>
+          <div class="row two">
+            <label>Z waluty
+              <select id="cur-from">
+                <option>PLN</option><option>EUR</option><option>USD</option>
+              </select>
+            </label>
+            <label>Na walutę
+              <select id="cur-to">
+                <option>EUR</option><option>PLN</option><option>USD</option>
+              </select>
+            </label>
+            <button class="swap" id="cur-swap" title="Zamień kierunek" aria-label="Zamień waluty">⇄</button>
+          </div>
+
+          <details class="settings">
+            <summary>Ustawienia kursów</summary>
+            <div class="row">
+              <label class="inline">
+                <input type="checkbox" id="cur-manual-toggle"> Tryb ręczny (własny kurs)
+              </label>
+            </div>
+            <div class="row" id="cur-manual-wrap" hidden>
+              <label>Kurs ręczny: 1 <span id="cur-manual-from">PLN</span> =
+                <input type="number" id="cur-manual-rate" step="0.0001" min="0" value="1.00" inputmode="decimal" style="max-width:140px">
+                <span id="cur-manual-to">EUR</span>
+              </label>
+            </div>
+            <div class="row">
+              <button class="btn" id="cur-refresh">Pobierz kursy (exchangerate.host)</button>
+              <span class="muted small" id="cur-source">Źródło: wbudowane / ręczne</span>
+            </div>
+          </details>
+
+          <div class="result">
+            <div class="big" id="cur-result">—</div>
+            <div class="muted" id="cur-rate-info">Kurs: —</div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="cur-save">Zapisz do historii</button>
+          </div>
+
+          <div class="chart-wrap">
+            <div class="chart-head">
+              <strong>Wykres kursu</strong>
+              <div class="range">
+                <button class="chip chip-sm" data-range="7">7D</button>
+                <button class="chip chip-sm active" data-range="30">30D</button>
+                <button class="chip chip-sm" data-range="90">90D</button>
+                <button class="chip chip-sm" data-range="365">1R</button>
+              </div>
+              <button class="btn" id="cur-chart-refresh">Odśwież wykres</button>
+            </div>
+            <canvas id="cur-chart" width="600" height="260" aria-label="Wykres kursu" role="img"></canvas>
+            <div class="muted small" id="cur-chart-note">Źródło: exchangerate.host (ECB). Jeśli offline – ostatnie zapisane dane.</div>
+            <div class="muted small" id="cur-chart-status"></div>
+          </div>
+        </div>
+
+        <!-- DŁUGOŚĆ -->
+        <div class="panel hidden" id="panel-length" role="tabpanel" aria-hidden="true">
+          <div class="row">
+            <label>Wartość
+              <input type="number" id="len-amount" step="0.0001" value="1" inputmode="decimal">
+            </label>
+          </div>
+          <div class="row two">
+            <label>Z jednostki
+              <select id="len-from"></select>
+            </label>
+            <label>Na jednostkę
+              <select id="len-to"></select>
+            </label>
+            <button class="swap" id="len-swap" aria-label="Zamień jednostki">⇄</button>
+          </div>
+          <div class="result">
+            <div class="big" id="len-result">—</div>
+            <div class="muted" id="len-info">1 m = 100 cm, itd.</div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="len-save">Zapisz do historii</button>
+          </div>
+        </div>
+
+        <!-- TEMPERATURA -->
+        <div class="panel hidden" id="panel-temperature" role="tabpanel" aria-hidden="true">
+          <div class="row">
+            <label>Wartość
+              <input type="number" id="tmp-amount" step="0.1" value="0" inputmode="decimal">
+            </label>
+          </div>
+          <div class="row two">
+            <label>Z jednostki
+              <select id="tmp-from">
+                <option value="C">°C</option>
+                <option value="F">°F</option>
+                <option value="K">K</option>
+              </select>
+            </label>
+            <label>Na jednostkę
+              <select id="tmp-to">
+                <option value="C">°C</option>
+                <option value="F">°F</option>
+                <option value="K">K</option>
+              </select>
+            </label>
+            <button class="swap" id="tmp-swap" aria-label="Zamień jednostki">⇄</button>
+          </div>
+          <div class="result">
+            <div class="big" id="tmp-result">—</div>
+            <div class="muted" id="tmp-info">Wzory: °F = °C×9/5+32, K = °C+273,15</div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="tmp-save">Zapisz do historii</button>
+          </div>
+        </div>
+
+        <!-- MASA -->
+        <div class="panel hidden" id="panel-mass" role="tabpanel" aria-hidden="true">
+          <div class="row">
+            <label>Wartość
+              <input type="number" id="mass-amount" step="0.0001" value="1" inputmode="decimal">
+            </label>
+          </div>
+          <div class="row two">
+            <label>Z jednostki
+              <select id="mass-from"></select>
+            </label>
+            <label>Na jednostkę
+              <select id="mass-to"></select>
+            </label>
+            <button class="swap" id="mass-swap" aria-label="Zamień jednostki">⇄</button>
+          </div>
+          <div class="result">
+            <div class="big" id="mass-result">—</div>
+            <div class="muted" id="mass-info">1 kg = 1000 g, 1 lb = 0,45359237 kg…</div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="mass-save">Zapisz do historii</button>
+          </div>
+        </div>
+
+        <!-- OBJĘTOŚĆ -->
+        <div class="panel hidden" id="panel-volume" role="tabpanel" aria-hidden="true">
+          <div class="row">
+            <label>Wartość
+              <input type="number" id="vol-amount" step="0.0001" value="1" inputmode="decimal">
+            </label>
+          </div>
+          <div class="row two">
+            <label>Z jednostki
+              <select id="vol-from"></select>
+            </label>
+            <label>Na jednostkę
+              <select id="vol-to"></select>
+            </label>
+            <button class="swap" id="vol-swap" aria-label="Zamień jednostki">⇄</button>
+          </div>
+          <div class="result">
+            <div class="big" id="vol-result">—</div>
+            <div class="muted" id="vol-info">1 L = 1000 mL, 1 US gal = 3,78541 L…</div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="vol-save">Zapisz do historii</button>
+          </div>
+        </div>
+
+        <!-- PRĘDKOŚĆ -->
+        <div class="panel hidden" id="panel-speed" role="tabpanel" aria-hidden="true">
+          <div class="row">
+            <label>Wartość
+              <input type="number" id="spd-amount" step="0.0001" value="10" inputmode="decimal">
+            </label>
+          </div>
+          <div class="row two">
+            <label>Z jednostki
+              <select id="spd-from"></select>
+            </label>
+            <label>Na jednostkę
+              <select id="spd-to"></select>
+            </label>
+            <button class="swap" id="spd-swap" aria-label="Zamień jednostki">⇄</button>
+          </div>
+          <div class="result">
+            <div class="big" id="spd-result">—</div>
+            <div class="muted" id="spd-info">1 m/s = 3,6 km/h, 1 mph ≈ 1,60934 km/h…</div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="spd-save">Zapisz do historii</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- HISTORIA -->
+      <aside class="card history">
+        <div class="history-head">
+          <strong>Historia</strong>
+          <div class="filters">
+            <button class="chip active" data-filter="all">Wszystko</button>
+            <button class="chip" data-filter="currency">Waluta</button>
+            <button class="chip" data-filter="length">Długość</button>
+            <button class="chip" data-filter="temperature">Temperatura</button>
+            <button class="chip" data-filter="mass">Masa</button>
+            <button class="chip" data-filter="volume">Objętość</button>
+            <button class="chip" data-filter="speed">Prędkość</button>
+          </div>
+        </div>
+        <ul id="history-list" class="history-list" aria-live="polite"></ul>
+        <div class="history-actions">
+          <button class="btn ghost" id="history-export" title="Eksportuj do JSON">Eksport</button>
+          <button class="btn danger" id="history-clear">Wyczyść historię</button>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="app-footer muted small">
+      Wykres potrzebuje internetu do pobrania danych; cache działa offline.
+    </footer>
+  </div>
+
+  <!-- Skrypt aplikacji -->
+  <script defer src="./script.js?v=13"></script>
+<script defer src="./fallbacks.js?v=13"></script>
+</body>
+</html>

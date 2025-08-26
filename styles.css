@@ -1,0 +1,280 @@
+:root{
+  --bg: #0f1116;
+  --panel: #141a22;
+  --panel-2: #1a2230;
+  --text: #e9edf2;
+  --muted: #9aa4b3;
+  --accent: #6aa6ff;
+  --accent-2: #8bd6a3;
+  --warn: #ffcf66;
+  --danger: #ff6b6b;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius: 14px;
+  --border: 1px solid rgba(255,255,255,.08);
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --panel-2:#f2f4f8; --text:#0e1220;
+    --muted:#5c6677; --shadow: 0 10px 30px rgba(0,0,0,.08);
+    --border: 1px solid rgba(0,0,0,.08);
+  }
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,var(--bg),#0b0d11 50%); color:var(--text);
+  padding:16px;
+}
+.app{
+  width:min(1200px,100%);
+  margin:0 auto;              /* centrowanie tylko w poziomie */
+  display:grid; gap:18px;
+}
+/* header zawsze „na wierzchu” i klikalny */
+.app-header{
+  position:sticky; top:0; z-index:5;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 6px; margin:-8px -6px 6px;   /* lekki negatywny margines, by tło było pełne */
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  border-radius:12px;
+  backdrop-filter:saturate(120%) blur(6px);
+}
+
+.grid{display:grid; grid-template-columns:1.35fr 1fr; gap:18px}
+@media (max-width:1060px){ .grid{grid-template-columns:1fr} }
+
+.card{
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  border:var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px;
+}
+
+.tabs{display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap}
+.tab{
+  background:transparent; border:var(--border); color:inherit; padding:8px 12px; border-radius:999px; cursor:pointer
+}
+.tab.active{outline:2px solid var(--accent)}
+
+.panel.hidden{display:none}
+.panel .row{display:flex; gap:12px; align-items:center; margin:10px 0}
+.panel .row.two{display:grid; grid-template-columns:1fr 1fr auto; gap:12px}
+label{display:flex; flex-direction:column; gap:6px}
+input, select, button{
+  font:inherit; color:inherit; background:#0e1420; border:var(--border); border-radius:12px; padding:10px 12px;
+}
+@media (prefers-color-scheme: light){
+  input, select, button{background:#fff}
+}
+input[type="number"]{width:100%}
+.swap{
+  align-self:end; padding:10px 14px; cursor:pointer; background:transparent
+}
+.settings{background:rgba(255,255,255,.03); border-radius:12px; padding:8px 10px}
+.settings summary{cursor:pointer}
+.settings .inline{display:flex; flex-direction:row; align-items:center; gap:8px}
+
+.result{margin-top:6px}
+.big{font-size:28px; font-variant-numeric:tabular-nums; font-weight:700}
+
+.actions{margin-top:10px; display:flex; gap:8px; flex-wrap:wrap}
+.primary{background:var(--accent); color:#0b1220; border:none; font-weight:700}
+.btn{background:transparent}
+.btn.ghost{opacity:.85}
+.btn.danger{background:var(--danger); color:#181818; border:none; font-weight:700}
+
+.chart-wrap{margin-top:16px}
+.chart-head{display:flex; align-items:center; justify-content:space-between; gap:8px}
+.range{display:flex; gap:6px; flex-wrap:wrap}
+.chip{background:transparent; border:var(--border); padding:6px 10px; border-radius:999px; cursor:pointer}
+.chip-sm{padding:4px 8px; font-size:12px}
+.chip.active{outline:2px solid var(--accent)}
+#cur-chart{width:100%; height:auto; display:block; border-radius:10px; border:1px dashed rgba(255,255,255,.08); background:rgba(255,255,255,.02)}
+
+.history{display:flex; flex-direction:column; min-height:420px}
+.history-head{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.filters{display:flex; flex-wrap:wrap; gap:6px}
+.history-list{list-style:none; margin:12px 0 0; padding:0; display:grid; gap:10px; max-height:520px; overflow:auto}
+.item{
+  display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center;
+  padding:10px 12px; border:1px dashed rgba(255,255,255,.12); border-radius:12px; background:rgba(255,255,255,.03)
+}
+.item .meta{font-size:12px; color:var(--muted)}
+.item .actions{display:flex; gap:6px}
+.item .tag{font-size:12px; padding:2px 8px; border-radius:999px; border:var(--border)}
+.type-currency .tag{border-color:color-mix(in srgb,var(--accent) 60%, transparent)}
+.type-length .tag{border-color:color-mix(in srgb,var(--accent-2) 60%, transparent)}
+.type-temperature .tag{border-color:color-mix(in srgb,var(--warn) 60%, transparent)}
+.type-mass .tag{border-color:color-mix(in srgb,#ff8bbb 60%, transparent)}
+.type-volume .tag{border-color:color-mix(in srgb,#66ffd1 60%, transparent)}
+.type-speed .tag{border-color:color-mix(in srgb,#c5a6ff 60%, transparent)}
+
+.history-actions{display:flex; justify-content:space-between; margin-top:10px}
+
+.app-footer{text-align:center; margin-top:-4px}
+
+/* drobne usprawnienia dostępności na tel. */
+@media (max-width:520px){
+  .panel .row.two{grid-template-columns:1fr; grid-auto-rows:auto}
+  .swap{justify-self:start}
+}
+.chart-head{display:flex; align-items:center; gap:8px; justify-content:space-between; flex-wrap:wrap}
+.chart-head .range{margin-left:auto}
+/* === NEON PATCH (drop-in) ============================================ */
+/* Paleta – możesz zmienić 3 kolory i wszystko się dostosuje */
+:root{
+  --neon-1: #7dd3ff;   /* niebieski cyjan */
+  --neon-2: #78f7c5;   /* mięta */
+  --neon-3: #ff8bfd;   /* róż */
+  --btn-glow: color-mix(in srgb, var(--neon-1) 55%, transparent);
+}
+
+/* Uniwersalne przejścia – delikatnie na mobile */
+button, .chip, .tab {
+  position: relative;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+  will-change: transform, box-shadow;
+}
+
+/* Główny przycisk */
+.primary{
+  background-image: linear-gradient(135deg, var(--neon-1), var(--neon-2));
+  color:#06131c; border:0;
+  box-shadow:
+    0 0 0 1px var(--btn-glow),
+    0 10px 30px -10px var(--btn-glow),
+    0 0 24px -10px var(--neon-1);
+}
+.primary:hover{ transform: translateY(-1px); box-shadow:
+    0 0 0 1px var(--btn-glow),
+    0 16px 40px -14px var(--btn-glow),
+    0 0 40px -10px var(--neon-1);
+}
+.primary:active{ transform: translateY(0); }
+
+/* Zakładki i „chipsy” – stan aktywny jak neon */
+.tab.active, .chip.active{
+  background-image: linear-gradient(135deg, var(--neon-1) 0%, var(--neon-2) 100%);
+  color:#06131c; border:0;
+  box-shadow:
+    0 0 0 1px var(--btn-glow),
+    0 8px 26px -12px var(--btn-glow);
+}
+.tab:hover, .chip:hover, .btn:hover{
+  box-shadow: 0 0 0 1px var(--btn-glow), 0 6px 18px -12px var(--btn-glow);
+}
+
+/* Zwykłe przyciski (btn) – lekki neon na hover */
+.btn{
+  border-color: color-mix(in srgb, var(--neon-1) 20%, transparent);
+}
+.btn.danger{
+  background: linear-gradient(135deg, #ff8a8a, #ff6b6b);
+  color:#1a0f0f; border:0;
+  box-shadow: 0 0 0 1px color-mix(in srgb, #ff6b6b 45%, transparent);
+}
+
+/* Przycisk „swap” (↔) – subtelny glow przy hover */
+.swap{
+  background: transparent;
+  border-color: color-mix(in srgb, var(--neon-1) 25%, transparent);
+}
+.swap:hover{
+  box-shadow: 0 0 0 1px var(--btn-glow), 0 8px 24px -16px var(--btn-glow);
+}
+
+/* Pierścień dostępności – wyraźny, ale elegancki */
+button:focus-visible, .chip:focus-visible, .tab:focus-visible{
+  outline: none;
+  box-shadow:
+    0 0 0 2px #0b0d11,
+    0 0 0 4px var(--neon-1),
+    0 0 30px -10px var(--neon-1);
+}
+
+/* Light mode – przyciemniamy tekst na neonowych tłach */
+@media (prefers-color-scheme: light){
+  .primary, .tab.active, .chip.active{ color:#041018; }
+}
+
+/* Mniej animacji dla osób z „reduce motion” */
+@media (prefers-reduced-motion: reduce){
+  button, .chip, .tab{ transition:none }
+}
+/* === THEME SWITCH (CSS-only) ====================================== */
+.theme-switch{
+  position: fixed; top: 10px; right: calc(10px + env(safe-area-inset-right));
+  z-index: 50; display:flex; gap:6px; padding:6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, #000 25%, transparent);
+  backdrop-filter: saturate(120%) blur(8px);
+}
+.theme-switch input{ position:absolute; opacity:0; pointer-events:none; }
+.theme-switch label{
+  cursor:pointer; padding:6px 10px; border-radius:999px;
+  border: var(--border); font-size:12px; user-select:none;
+  background: transparent;
+}
+.theme-switch input:checked + label{
+  background-image: linear-gradient(135deg, var(--neon-1), var(--neon-2));
+  color:#06131c; border:0;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--neon-1) 55%, transparent),
+              0 8px 26px -12px color-mix(in srgb, var(--neon-1) 55%, transparent);
+}
+
+/* DOMYŚLNY zestaw (Blue/Mint) – działa nawet bez :has() */
+:root{
+  --neon-1:#7dd3ff; --neon-2:#78f7c5; --neon-3:#ff8bfd;
+  --accent: var(--neon-1); --accent-2: var(--neon-2);
+}
+
+/* Zmiana palety przez :has() – zero JS */
+:root:has(#theme-blue:checked){
+  --neon-1:#7dd3ff; --neon-2:#78f7c5; --neon-3:#ff8bfd;
+  --accent: var(--neon-1); --accent-2: var(--neon-2);
+}
+:root:has(#theme-violet:checked){
+  --neon-1:#c3a6ff; --neon-2:#ff8bfd; --neon-3:#ffd4ff;
+  --accent: var(--neon-1); --accent-2: var(--neon-2);
+}
+:root:has(#theme-lime:checked){
+  --neon-1:#b7ff5a; --neon-2:#7df4ff; --neon-3:#eaffc7;
+  --accent: var(--neon-1); --accent-2: var(--neon-2);
+}
+
+/* delikatny „glow” gdy motyw zmieniony */
+body{ transition: background 220ms ease, color 220ms ease; }
+/* === THEME OVERRIDES (MUSI BYĆ OSTATNIE) ======================= */
+html[data-theme="blue"]{
+  --neon-1:#7dd3ff; --neon-2:#78f7c5; --neon-3:#ff8bfd;
+  --accent:var(--neon-1); --accent-2:var(--neon-2);
+}
+html[data-theme="violet"]{
+  --neon-1:#c3a6ff; --neon-2:#ff8bfd; --neon-3:#ffd4ff;
+  --accent:var(--neon-1); --accent-2:var(--neon-2);
+}
+html[data-theme="lime"]{
+  --neon-1:#b7ff5a; --neon-2:#7df4ff; --neon-3:#eaffc7;
+  --accent:var(--neon-1); --accent-2:var(--neon-2);
+}
+:root{
+  /* wcześniej pewnie było coś jak #141a22 / #1a2230 */
+  --panel:  #16202b;
+  --panel-2:#1c2f3c;
+  /* delikatniejsza ramka i cień dla kart/nagłówka (jeśli używasz tych zmiennych) */
+  --border: 1px solid color-mix(in srgb, #ffffff 10%, transparent);
+}
+
+/* Opcjonalnie: odrobina większej jasności (jeśli chcesz jeszcze jaśniej)
+:root{
+  --panel:  #1a2d3a;
+  --panel-2:#233a4a;
+  --border: 1px solid color-mix(in srgb, #ffffff 12%, transparent);
+}
+*/
+
+/* Dodatkowe, nieinwazyjne podbicie czytelności – tylko jeśli masz te selektory */
+.card, .app-header{
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  box-shadow: 0 8px 32px -20px rgba(0,0,0,.6);
+}
+/* ==================================================================== */
