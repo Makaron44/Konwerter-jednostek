@@ -24,7 +24,7 @@ function jfetch(url, opts, timeoutMs){
 }
 // ===== Theme (fallback bez :has()) =====
 (function(){
-  var MAP={'theme-blue':'blue','theme-violet':'violet','theme-lime':'lime'};
+  var MAP={'theme-blue':'blue','theme-violet':'violet','theme-lime':'lime','theme-orange':'orange'};
   try{
     var saved = localStorage.getItem(LS.theme) || 'theme-blue';
     document.documentElement.setAttribute('data-theme', MAP[saved] || 'blue');

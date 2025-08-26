@@ -277,4 +277,118 @@ html[data-theme="lime"]{
   background: linear-gradient(180deg, var(--panel), var(--panel-2));
   box-shadow: 0 8px 32px -20px rgba(0,0,0,.6);
 }
+/* === HISTORY: mobile-friendly layout (drop-in) ======================= */
+#history-list .item{
+  display:flex;
+  flex-direction: column;            /* na telefonie: opis nad przyciskami */
+  gap:12px;
+  line-height:1.28;
+}
+#history-list .item > div:first-child{
+  /* opis: nie łam słów co literę, ale pozwól łamać długie tokeny */
+  word-break: normal;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  font-size: 15.5px;
+}
+#history-list .item .tag{
+  display:inline-block;
+  padding:2px 8px;
+  border-radius:999px;
+  white-space: nowrap;                /* „Waluta” nie rozbija się na dwie linie */
+  margin-right:6px;
+}
+#history-list .item .actions{
+  display:flex;                       /* przyciski obok siebie */
+  gap:10px;
+}
+#history-list .item .actions .btn{
+  flex:1;                             /* równa szerokość, łatwe do trafienia kciukiem */
+  min-width: 0;
+}
+
+/* Na szerszych ekranach wracamy do układu „opis z lewej, akcje z prawej” */
+@media (min-width: 680px){
+  #history-list .item{
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  #history-list .item .actions{
+    margin-left: auto;
+    width:auto;
+  }
+}
+/* === HISTORY BUTTONS – NEON (drop-in) =============================== */
+#history-list .item .actions .btn{
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .12s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+  border-radius: 14px;
+}
+
+/* 1) „Użyj ponownie” – wypełniony neon */
+#history-list .item .actions .btn:first-child{
+  background-image: linear-gradient(135deg, var(--neon-1), var(--neon-2));
+  color:#06131c;
+  border:0;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--neon-1) 55%, transparent),
+    0 10px 30px -12px color-mix(in srgb, var(--neon-1) 60%, transparent),
+    0 0 26px -10px color-mix(in srgb, var(--neon-2) 70%, transparent);
+}
+#history-list .item .actions .btn:first-child:active{
+  transform: translateY(1px);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--neon-1) 50%, transparent),
+    0 8px 18px -12px color-mix(in srgb, var(--neon-1) 60%, transparent);
+}
+
+/* 2) „Kopiuj wynik” – neonowy outline */
+#history-list .item .actions .btn:nth-child(2){
+  background: transparent;
+  color: color-mix(in srgb, var(--neon-1) 85%, white 5%);
+  border: 1px solid color-mix(in srgb, var(--neon-1) 60%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--neon-1) 35%, transparent),
+    inset 0 0 16px -12px color-mix(in srgb, var(--neon-1) 50%, transparent);
+}
+#history-list .item .actions .btn:nth-child(2):active{
+  transform: translateY(1px);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--neon-1) 50%, transparent),
+    inset 0 0 18px -12px color-mix(in srgb, var(--neon-1) 55%, transparent);
+}
+
+/* dostępność */
+#history-list .item .actions .btn:focus-visible{
+  outline: 2px solid color-mix(in srgb, var(--neon-2) 70%, transparent);
+  outline-offset: 2px;
+}
+
+/* redukcja animacji */
+@media (prefers-reduced-motion: reduce){
+  #history-list .item .actions .btn{ transition:none; }
+}
+/* === THEME: ORANGE/PEACH =========================================== */
+html[data-theme="orange"]{
+  --neon-1:#ffb454;   /* amber */
+  --neon-2:#ff8a5c;   /* peach/coral */
+  --neon-3:#ffe0c2;   /* jasny żar */
+  --accent:var(--neon-1);
+  --accent-2:var(--neon-2);
+}
+/* Orange tweak – mocniejszy outline i glow tylko w motywie orange */
+html[data-theme="orange"] #history-list .item .actions .btn:nth-child(2){
+  color: color-mix(in srgb, var(--neon-1) 90%, white 10%);
+  border-color: color-mix(in srgb, var(--neon-2) 75%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--neon-2) 55%, transparent),
+    inset 0 0 18px -10px color-mix(in srgb, var(--neon-1) 60%, transparent);
+}
+html[data-theme="orange"] #history-list .item .actions .btn:nth-child(2):active{
+  transform: translateY(1px);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--neon-2) 65%, transparent),
+    inset 0 0 22px -10px color-mix(in srgb, var(--neon-1) 65%, transparent);
+}
+/* =================================================================== */
 /* ==================================================================== */
